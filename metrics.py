@@ -53,5 +53,5 @@ class MetronAtK(object):
         test_in_top_k =top_k[top_k['test_item'] == top_k['item']]
         test_in_top_k['ndcg'] = test_in_top_k['rank'].apply(lambda x: 1 / math.log2(1 + x))
         test_in_top_k["test_score"] = test_in_top_k["test_score"].apply(lambda x : 1/(1+np.exp(-x)))
+        print(test_in_top_k)
         return test_in_top_k['ndcg'].sum() * 1.0 / full['user'].nunique()
-
