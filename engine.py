@@ -4,14 +4,11 @@ from metrics import MetronAtK
 
 
 class Engine(object):
-    #Meta Engine for training & evaluating NCF model
     def __init__(self):
         self._metron = MetronAtK(top_k=10)
        
-
     def evaluate(self,model, evaluate_data, epoch_id):
-        assert hasattr(self, 'model'), 'Please specify the exact model !'
-        
+
         model.eval()
         with torch.no_grad():
             test_users, test_items = evaluate_data[0], evaluate_data[1]
@@ -21,8 +18,8 @@ class Engine(object):
             test_items = test_items.cuda()
             negative_users = negative_users.cuda()
             negative_items = negative_items.cuda()
-            test_scores = self.model(test_users, test_items)
-            negative_scores = self.model(negative_users, negative_items)
+            test_scores = model(test_users, test_items)
+            negative_scores = model(negative_users, negative_items)
             
             #to cpu
             test_users = test_users.cpu()

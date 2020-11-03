@@ -21,6 +21,13 @@ class UserItemRatingDataset(Dataset):
     def __len__(self):
         return self.user_tensor.size(0)
 
+class MySampler(Sampler):
+    def __init__(self,data_source):
+        
+        self.seq = list(range(len(data_source)))
+    def __iter__(self): 
+        return iter(self.seq)
+    
 
 class SampleGenerator(object):
     def __init__(self, ratings):
@@ -74,7 +81,8 @@ class SampleGenerator(object):
         dataset = UserItemRatingDataset(user_tensor=torch.LongTensor(users),
                                         item_tensor=torch.LongTensor(items),
                                         target_tensor=torch.FloatTensor(ratings))
-        return DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        sampler = MySampler(dataset)
+        return DataLoader(dataset, batch_size=batch_size, shuffle=False, sampler=sampler)
 
 
     @property
