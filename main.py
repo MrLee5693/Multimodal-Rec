@@ -125,7 +125,7 @@ def main():
         N.append(ndcg)
         if patience > 10:
             break
-        elif N[-1] < N.max():
+        elif N[-1] < max(N):
             patience += 1
         else:
             patience = 0
