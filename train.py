@@ -10,9 +10,11 @@ import os
 import warnings
 import time
 import random
+import wandb
 warnings.filterwarnings("ignore")
 
 def main(): 
+    wandb.init(project="recommendation")
     parser = argparse.ArgumentParser()
     parser.add_argument('--lr',
                 type=float,
@@ -51,6 +53,7 @@ def main():
                 default='0',
                 help='gpu number')
     args = parser.parse_args()
+    wandb.config.update(args)
     
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
     
@@ -84,6 +87,7 @@ def main():
     
     optimizer = torch.optim.Adam(model.parameters(),lr=args.lr,weight_decay=args.l2)
     criterion = nn.BCEWithLogitsLoss()
+    wandb.watch(model)
     
     N = []
     patience = 0
@@ -109,11 +113,15 @@ def main():
             loss.backward()
             optimizer.step()
             loss = loss.item()
+            wandb.log({'Batch Loss': loss})
             total_loss += loss
             
         print("Train 끝")
         engine = Engine()    
         hit_ratio, ndcg = engine.evaluate(model = model, evaluate_data= evaluate_data, epoch_id=epoch)
+        wandb.log({"epoch" : epoch,
+                    "HR" : hit_ratio,
+                    "NDCG" : ndcg})
         N.append(ndcg)
         if patience > 10:
             print("Patience = 10 초과")

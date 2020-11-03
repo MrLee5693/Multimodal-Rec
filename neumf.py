@@ -7,8 +7,8 @@ class NeuMF(torch.nn.Module):
         super(NeuMF,self).__init__()
         self.user_embedding_gmf = nn.Embedding(num_users,latent_dim_mf)
         self.song_embedding_gmf = nn.Embedding(num_items,latent_dim_mf)
-        self.user_embedding_mlp = nn.Embedding(num_users,latent_dim_mf*(2**(num_layers-1)))
-        self.song_embedding_mlp = nn.Embedding(num_items,latent_dim_mf*(2**(num_layers-1)))
+        self.user_embedding_mlp = nn.Embedding(num_users,int(latent_dim_mf*(2**(num_layers-1))))
+        self.song_embedding_mlp = nn.Embedding(num_items,int(latent_dim_mf*(2**(num_layers-1))))
    
         MLP_modules = []
         for i in range(num_layers):
