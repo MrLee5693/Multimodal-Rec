@@ -9,8 +9,6 @@ class Engine(object):
        
 
     def evaluate(self,model, evaluate_data, epoch_id):
-        assert hasattr(self, 'model'), 'Please specify the exact model !'
-        
         model.eval()
         with torch.no_grad():
             test_users, test_items = evaluate_data[0], evaluate_data[1]

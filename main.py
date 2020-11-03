@@ -20,7 +20,7 @@ def main():
     parser.add_argument('--epochs',
                 type=int,
                 default=5,
-                help='learning rate')
+                help='epochs')
     parser.add_argument('--batch_size',
                 type=int,
                 default=1024,
@@ -94,7 +94,7 @@ def main():
         print('Epoch {} starts !'.format(epoch))
         print('-' * 80)
         t1 = time.time()
-        train_loader = sample_generator.instance_a_train_loader(args.ng_sample, args.batch_size)
+        train_loader = sample_generator.instance_a_train_loader(args.num_ng, args.batch_size)
         t2 = time.time()
         print("Train_Loader Time = {:.4f}".format(t2-t1))
         
@@ -116,10 +116,12 @@ def main():
             loss = loss.item()
             total_loss += loss
             count+=1
+            print(count)
             
         
         engine = Engine()    
         hit_ratio, ndcg = engine.evaluate(model = model, evaluate_data= evaluate_data, epoch_id=epoch)
+        print(hit_ratio,ndcg)
         N.append(ndcg)
         if patience > 10:
             break
