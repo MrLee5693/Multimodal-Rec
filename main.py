@@ -19,7 +19,7 @@ def main():
                 help='learning rate')
     parser.add_argument('--epochs',
                 type=int,
-                default=5,
+                default=20,
                 help='epochs')
     parser.add_argument('--batch_size',
                 type=int,
@@ -101,7 +101,6 @@ def main():
         
         model.train()
         total_loss = 0
-        count=0
         t3 = time.time()
         for batch_id, batch in enumerate(train_loader):
             assert isinstance(batch[0], torch.LongTensor)
@@ -115,8 +114,7 @@ def main():
             optimizer.step()
             loss = loss.item()
             total_loss += loss
-            count+=1
-            print(count)
+            
             
         
         engine = Engine()    
