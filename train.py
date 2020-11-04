@@ -6,6 +6,7 @@ import argparse
 from data import SampleGenerator
 from neumf import NeuMF
 from engine import Engine
+from utils import save_checkpoint , resume_checkpoint,optimizer
 import os
 import warnings
 import time
@@ -36,6 +37,10 @@ def main():
                 type=int,
                 default=3,
                 help='num layers')
+    parser.add_argument('--optim',
+                type=str,
+                default='adam',
+                help='optimizer')
     parser.add_argument('--num_ng',
                 type=int,
                 default=4,
@@ -85,7 +90,7 @@ def main():
     model = nn.DataParallel(model)
     print(model)
     
-    optimizer = torch.optim.Adam(model.parameters(),lr=args.lr,weight_decay=args.l2)
+    optim = optimizer(optim=args.optim, lr=args.lr, model=model, weight_decay=args.l2)
     criterion = nn.BCEWithLogitsLoss()
     wandb.watch(model)
     
@@ -107,11 +112,11 @@ def main():
             users, items, ratings = batch[0], batch[1], batch[2]
             ratings = ratings.float()
             users, items, ratings = users.cuda(), items.cuda(), ratings.cuda()
-            optimizer.zero_grad()
+            optim.zero_grad()
             output = model(users, items)
             loss = criterion(output, ratings)
             loss.backward()
-            optimizer.step()
+            optim.step()
             loss = loss.item()
             wandb.log({'Batch Loss': loss})
             total_loss += loss
