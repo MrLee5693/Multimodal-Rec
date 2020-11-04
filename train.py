@@ -96,14 +96,10 @@ def main():
     
     N = []
     patience = 0
-    t1 = time.time()
-    train_loader = sample_generator.instance_a_train_loader(args.num_ng, args.batch_size)
-    t2 = time.time()
-    print("Train_Loader Time = {:.4f}".format(t2-t1))
     for epoch in range(args.epochs):
         print('Epoch {} starts !'.format(epoch))
         print('-' * 80)
-        random.shuffle(train_loader.sampler.seq)
+        train_loader = sample_generator.instance_a_train_loader(args.num_ng, args.batch_size)
         model.train()
         total_loss = 0
         t3 = time.time()
