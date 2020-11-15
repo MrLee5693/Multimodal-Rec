@@ -6,7 +6,7 @@ import argparse
 import time
 import random
 from Data_Loader import Make_Dataset, SampleGenerator
-from utils import save_checkpoint , resume_checkpoint,optimizer
+from utils import optimizer
 from model import NeuralCF
 from evaluate import Engine
 from metrics import MetronAtK
@@ -27,7 +27,7 @@ def main():
                 help='learning rate')
     parser.add_argument('--epochs',
                 type=int,
-                default=100,
+                default=20,
                 help='learning rate')
     parser.add_argument('--batch_size',
                 type=int,
