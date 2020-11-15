@@ -6,6 +6,7 @@ import argparse
 import time
 import random
 from Data_Loader import Make_Dataset, SampleGenerator
+from utils import save_checkpoint , resume_checkpoint,optimizer
 from model import NeuralCF
 from evaluate import Engine
 from metrics import MetronAtK
@@ -71,7 +72,7 @@ def main():
     model.cuda()
     model = nn.DataParallel(model)
     print(model)
-    optimizer = torch.optim.Adam(model.parameters(),lr=args.lr,weight_decay=args.l2)
+    optim = optimizer(optim=args.optim, lr=args.lr, model=model, weight_decay=args.l2)
     criterion = nn.BCEWithLogitsLoss()
     wandb.watch(model)
 
@@ -93,11 +94,11 @@ def main():
             users, items, ratings = batch[0], batch[1], batch[2]
             ratings = ratings.float()
             users, items, ratings = users.cuda(), items.cuda(), ratings.cuda()
-            optimizer.zero_grad()
+            optim.zero_grad()
             output = model(users, items)
             loss = criterion(output, ratings)
             loss.backward()
-            optimizer.step()
+            optim.step()
             loss = loss.item()
             wandb.log({'Batch Loss': loss})
             total_loss += loss
