@@ -1,0 +1,37 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.10.8
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    python_version: 3.8.3
+batch_size:
+  desc: null
+  value: 1024
+epochs:
+  desc: null
+  value: 20
+gpu:
+  desc: null
+  value: '3'
+l2:
+  desc: null
+  value: 0.0
+latent_dim_mf:
+  desc: null
+  value: 8
+lr:
+  desc: null
+  value: 0.001
+num_layers:
+  desc: null
+  value: 3
+num_neg:
+  desc: null
+  value: 4
+optim:
+  desc: null
+  value: adam
